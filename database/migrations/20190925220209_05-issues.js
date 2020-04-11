@@ -4,7 +4,7 @@ exports.up = function(knex) {
 
       issues.string("issue_title").notNullable();
       issues.string("issue_description").notNullable();
-      issues.string("date").notNullable();
+      issues.date("date").notNullable();
       issues.string('status').notNullable();
       issues
         .integer("comment_id")
