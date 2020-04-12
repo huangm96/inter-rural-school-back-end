@@ -91,13 +91,13 @@ function validateRegister(req, res, next) {
 
 function userType(req, res, next) {
   const {isBoardMember, school_id} = req.body;
-  if (isBoardMember === 1) {
+  if (isBoardMember) {
     Users.addBoard({ user_id: null })
     .then(added => {
       req.body.board_id = added[0];
       next();
     })
-  } else if (isBoardMember === 0) {
+  } else if (!isBoardMember) {
     Users.addAdmin({user_id: null, school_id: school_id })
     .then(added => {
       req.body.admin_id = added[0];
