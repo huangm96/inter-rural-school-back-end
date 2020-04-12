@@ -5,6 +5,7 @@ module.exports = {
   createIssue,
   getAllIssues,
   getAnIssues,
+  getIssuesbySchool,
   editIssue,
   removeIssue
 };
@@ -23,7 +24,11 @@ function getAllIssues() {
 function getAnIssues(id) {
     return db('issues').where({id}).first();
 }
-
+function getIssuesbySchool(id) {
+  return db("issues")
+    .join("schools", "schools.id", "issues.school_id")
+    .where("issues.school_id", "=", id);
+}
 function editIssue(changes, id) {
     return db('issues')
     .where({ id })

@@ -6,13 +6,7 @@ exports.up = function(knex) {
       issues.string("issue_description").notNullable();
       issues.date("date").notNullable();
       issues.string('status').notNullable();
-      issues
-        .integer("comment_id")
-        .unsigned()
-        .references('id')
-        .inTable('comments')
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
+
       issues
         .integer("school_id")
         .unsigned()

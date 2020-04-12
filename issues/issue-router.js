@@ -1,13 +1,18 @@
 const express = require('express');
+var moment = require("moment");
 
 const Issues = require('./issue-model.js');
+const schools = require("../schools/school-model");
+
 const Comments = require('../comments/comment-model.js');
 const restricted = require("../auth/restricted-middleware.js");
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    const issue = req.body
-  
+
+    var issue = req.body
+    issue.date = moment().format();
+    
     Issues.createIssue(issue)
     .then(issue => {
         res.status(201).json(issue);
@@ -42,11 +47,40 @@ router.get('/:id', (req, res) => {
         res.status(500).json({error: "Error getting issues from database"})
     })
 })
-
+router.get("/school/:id", (req, res) => {
+    const { id } = req.params;
+  schools.findBySchoolId(id)
+    .then((school) => {
+        if (school) {
+         console.log(school)
+        Issues.getIssuesbySchool(id)
+          .then((issues) => {
+            if (issues) {
+              res.status(201).json(issues);
+            } else {
+              res
+                .status(404)
+                .json({ message: "Issue with this id does not exist" });
+            }
+          })
+          .catch((err) => {
+            res
+              .status(500)
+              .json({ error: "Error getting issues from database" });
+          });
+      } else {
+        res.status(404).json({ message: "School with this id does not exist" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ error: "Error getting school from database" });
+    });
+  
+});
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
-  
+    changes.date = moment().format();
     Issues.editIssue(changes, id)
     .then(issue => {
       if (issue) {
