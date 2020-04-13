@@ -6,7 +6,8 @@ module.exports = {
   addBoard,
   addAdmin,
   find,
-  updateAdminSchool
+  findAdminSchool,
+  updateAdminSchool,
 };
 
 function add(user) {
@@ -35,7 +36,11 @@ function addAdmin(admin) {
 function find(filter) {
   return db("users").where(filter);
 }
-
+function findAdminSchool(id) {
+  return db("admins")
+    .where({id})
+    
+}
 function updateAdminSchool(changes, id) {
   return db('admins')
     .where({id})

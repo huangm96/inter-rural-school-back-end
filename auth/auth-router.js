@@ -36,17 +36,35 @@ router.post('/login', (req, res) => {
   Users.find({ username })
   .first()
   .then(user => {
-    console.log(user)
-    if (user && bcrypt.compareSync(password, user.password)) {
-      const token = getJwt(user);
-      res.status(200).json({
-        message: `Hello ${user.first_name} ${user.last_name}, you have logged in as ${user.username}`,
-        token,
-        user
-      });
+    if (user.admin_id) {
+      Users.findAdminSchool(user.admin_id).then(school => {
+        user.school_id = school[0].school_id
+        if (user && bcrypt.compareSync(password, user.password)) {
+          const token = getJwt(user);
+          res.status(200).json({
+            message: `Hello ${user.first_name} ${user.last_name}, you have logged in as ${user.username}`,
+            token,
+            user,
+          });
+        } else {
+          res.status(401).json({ message: "Incorrect username or password" });
+        }
+      })
     } else {
-      res.status(401).json({ message: "Incorrect username or password" });
+      user.school_id = null;
+      if (user && bcrypt.compareSync(password, user.password)) {
+        const token = getJwt(user);
+        res.status(200).json({
+          message: `Hello ${user.first_name} ${user.last_name}, you have logged in as ${user.username}`,
+          token,
+          user,
+        });
+      } else {
+        res.status(401).json({ message: "Incorrect username or password" });
+      }
     }
+    console.log(user)
+    
   })
   .catch(err => {
     res.status(500).json({ message: "Error, can't access database" });
