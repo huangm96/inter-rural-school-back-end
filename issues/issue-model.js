@@ -17,17 +17,29 @@ function createIssue( issue) {
 
 //Board members should see this
 function getAllIssues() {
-  return db("issues");
+  return db("issues")
+    .join("schools", "schools.id", "issues.school_id")
+    .select(
+      "*",
+      "issues.id as id",
+      
+    );
+    
 }
 
 //Admins should see this
 function getAnIssues(id) {
-    return db('issues').where({id}).first();
+    return db("issues") 
+     .join("schools", "schools.id", "issues.school_id")
+     .where("issues.id","=",id).first()
+      
+     
 }
 function getIssuesbySchool(id) {
   return db("issues")
     .join("schools", "schools.id", "issues.school_id")
     .where("issues.school_id", "=", id)
+    .select("*", "issues.id as id");
     
 }
 function editIssue(changes, id) {
