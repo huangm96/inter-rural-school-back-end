@@ -17,7 +17,7 @@ function createIssue( issue) {
 
 //Board members should see this
 function getAllIssues() {
-  return db('issues');
+  return db("issues");
 }
 
 //Admins should see this
@@ -27,7 +27,8 @@ function getAnIssues(id) {
 function getIssuesbySchool(id) {
   return db("issues")
     .join("schools", "schools.id", "issues.school_id")
-    .where("issues.school_id", "=", id);
+    .where("issues.school_id", "=", id)
+    
 }
 function editIssue(changes, id) {
     return db('issues')
