@@ -80,7 +80,6 @@ router.get("/school/:id", (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
-    changes.date = moment().format();
     Issues.editIssue(changes, id)
     .then(issue => {
       if (issue) {

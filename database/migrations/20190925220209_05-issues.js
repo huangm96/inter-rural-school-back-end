@@ -6,6 +6,7 @@ exports.up = function(knex) {
       issues.string("issue_description").notNullable();
       issues.date("date").notNullable();
       issues.string('status').notNullable();
+      issues.string("createdBy").notNullable();
 issues
   .integer("comment_id")
   .unsigned()
