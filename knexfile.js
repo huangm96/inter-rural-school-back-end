@@ -8,7 +8,7 @@ module.exports = {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: "./database/migrations",
+      directory: "./database/new_migrations",
     },
     seeds: {
       directory: "./database/seeds",
@@ -25,7 +25,7 @@ module.exports = {
     client: "pg",
     connection: process.env.DATABASE_URL,
     migrations: {
-      directory: "./database/migrations",
+      directory: "./database/new_migrations",
     },
     seeds: {
       directory: "./database/seeds",
@@ -43,7 +43,7 @@ module.exports = {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: "./database/migrations",
+      directory: "./database/new_migrations",
     },
     seeds: {
       directory: "./database/seeds",
