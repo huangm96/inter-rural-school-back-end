@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
             console.log(commentids);
             Issues.editIssue({comment_id: commentids[0]}, comment.issue_id)
             .then(update => {
-                res.status(201).json(update);
+                res.status(201).json(commentids);
             })
             .catch(err => {
                 res.status(500).json({ message: 'Failed to update issue' });
@@ -43,5 +43,36 @@ router.post('/', (req, res) => {
         res.status(500).json({ message: 'Failed to create new comment on issue' });
         });
 })
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  Comments.editComment(changes, id)
+    .then((comment) => {
+      if (comment) {
+        res.status(200).json(comment);
+      } else {
+        res.status(404).json({ message: "This comment does not exist" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Failed to get comment from database" });
+    });
+});
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
 
+  Comments.removeComment(id)
+    .then((deleted) => {
+      if (deleted) {
+        res.status(200).json(deleted);
+      } else {
+        res.status(404).json({ message: "This user does not exist" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Failed to delete issue from database" });
+    });
+});
 module.exports = router;

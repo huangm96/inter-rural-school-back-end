@@ -6,6 +6,7 @@ module.exports = {
   createComment,
   removeComment,
   getCommentById,
+  editComment
 };
 
 function getComment() {
@@ -22,7 +23,7 @@ function getCommentById(id) {
   return db("comments")
     .select("*", "comments.id as id")
     .join("issues", "issues.id", "comments.issue_id")
-    .where({ "comments.issue_id": id })
+    .where({ "comments.id": id })
     .first();
 }
 
@@ -31,9 +32,13 @@ function getByIssueId(id) {
 }
 
 function createComment(comment) {
-  return db("comments").insert(comment);
+  return db("comments")
+    .insert(comment)
+    
 }
-
+function editComment(changes, id) {
+  return db("comments").where({ id }).update(changes);
+}
 function removeComment(id) {
   return db("comments").where({ id }).del();
 }
