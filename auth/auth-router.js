@@ -16,9 +16,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post('/register', validateRegister, userType, (req, res) => {
-  const { first_name, last_name, email, username, password, admin_id, isBoardMember, board_id } = req.body;
-  const user = { first_name, last_name, email, username, password, admin_id, isBoardMember, board_id };
+router.post('/register', validateRegister,  (req, res) => {
+  const { first_name, last_name, email, username, password,  isBoardMember,school_id } = req.body;
+  const user = { first_name, last_name, email, username, password, isBoardMember,school_id };
   const hash = bcrypt.hashSync(user.password);
   user.password = hash;
   Users.add(user)
@@ -36,9 +36,7 @@ router.post('/login', (req, res) => {
   Users.find({ username })
   .first()
   .then(user => {
-    if (user.admin_id) {
-      Users.findAdminSchool(user.admin_id).then(school => {
-        user.school_id = school[0].school_id
+   
         if (user && bcrypt.compareSync(password, user.password)) {
           const token = getJwt(user);
           res.status(200).json({
@@ -49,20 +47,8 @@ router.post('/login', (req, res) => {
         } else {
           res.status(401).json({ message: "Incorrect username or password" });
         }
-      })
-    } else {
-      user.school_id = null;
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const token = getJwt(user);
-        res.status(200).json({
-          message: `Hello ${user.first_name} ${user.last_name}, you have logged in as ${user.username}`,
-          token,
-          user,
-        });
-      } else {
-        res.status(401).json({ message: "Incorrect username or password" });
-      }
-    }
+      
+
     console.log(user)
     
   })
@@ -107,21 +93,6 @@ function validateRegister(req, res, next) {
     next();
 }
 
-function userType(req, res, next) {
-  const {isBoardMember, school_id} = req.body;
-  if (isBoardMember) {
-    Users.addBoard({ user_id: null })
-    .then(added => {
-      req.body.board_id = added[0];
-      next();
-    })
-  } else if (!isBoardMember) {
-    Users.addAdmin({user_id: null, school_id: school_id })
-    .then(added => {
-      req.body.admin_id = added[0];
-      next();
-    })
-  }
-}
+
 
 module.exports = router;
