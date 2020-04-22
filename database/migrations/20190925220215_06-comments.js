@@ -13,8 +13,8 @@ exports.up = function(knex) {
       comments
         .integer("board_id")
         .unsigned()
-        .references('id')
-        .inTable('boards')
+        .references("id")
+        .inTable("users")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
     });
