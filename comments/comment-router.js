@@ -28,20 +28,22 @@ router.get('/:id', (req,res) => {
 
 router.post('/', (req, res) => {
     const comment = req.body;
-    Comments.createComment( comment)
-        .then(commentids => {
-            console.log(commentids);
-            Issues.editIssue({comment_id: commentids[0]}, comment.issue_id)
-            .then(update => {
-                res.status(201).json(commentids);
-            })
-            .catch(err => {
-                res.status(500).json({ message: 'Failed to update issue' });
-            })
-        })
-        .catch (err => {
-        res.status(500).json({ message: 'Failed to create new comment on issue' });
-        });
+    Comments.createComment(comment)
+      .then((commentids) => {
+        console.log(commentids);
+        Issues.editIssue({ comment_id: commentids[0] }, comment.issue_id)
+          .then((update) => {
+            res.status(201).json(commentids);
+          })
+          .catch((err) => {
+            res.status(500).json({ message: "Failed to update issue" });
+          });
+      })
+      .catch((err) => {
+        res
+          .status(500)
+          .json({ message: "Failed to create new comment on issue" });
+      });
 })
 router.put("/:id", (req, res) => {
   const { id } = req.params;
