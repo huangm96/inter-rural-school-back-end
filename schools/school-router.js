@@ -35,8 +35,15 @@ router.post('/', (req, res) => {
     const schoolInfo = req.body;
   
     Schools.addSchool(schoolInfo)
-    .then(school => {
-      res.status(201).json(school);
+        .then(schoolid => {
+            Schools.findBySchoolId(schoolid[0]).then(school => {
+            res.status(201).json(school);
+            }).catch(err => {
+            res
+              .status(500)
+              .json(err, { message: "School with this id does not exist" });
+        })
+      
     })
     .catch (err => {
       res.status(500).json(err,{ message: 'Failed to create new school' });

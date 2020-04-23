@@ -19,10 +19,7 @@ function findBySchoolId(id) {
 function addSchool(school) {
   return db("schools")
     .insert(school)
-    .then((ids) => {
-      const [id] = ids;
-      return findBySchoolId(id);
-    });
+    
 }
 
 function updateSchool(changes, id) {
